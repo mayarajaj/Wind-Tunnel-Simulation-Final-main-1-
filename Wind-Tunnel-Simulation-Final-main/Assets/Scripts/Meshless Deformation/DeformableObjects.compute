@@ -1,0 +1,64 @@
+#pragma kernel CSMain
+
+// Constants
+#define THREADS_PER_GROUP 256
+
+// Buffers
+RWStructuredBuffer<float3> positions;
+RWStructuredBuffer<float3> velocities;
+StructuredBuffer<float3> initialPositions;
+StructuredBuffer<float> masses;
+StructuredBuffer<float3> windForceBuffer;
+float alpha;
+float timeStep;
+float forceThreshold;
+float massmin;
+float massmax;
+float3 initialCenterOfMass;
+
+// Methods
+float3 ComputeCenterOfMass(RWStructuredBuffer<float3> points, StructuredBuffer<float> masses, int count)
+{
+    float3 centerOfMass = float3(0, 0, 0);
+    float totalMass = 0;
+    for (int i = 0; i < count; i++)
+    {
+        centerOfMass += points[i] * masses[i];
+        totalMass += masses[i];
+    }
+    return centerOfMass / totalMass;
+}
+
+// Kernels
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int index = id.x;
+
+    // Apply Wind Force
+    float3 force = windForceBuffer[0] / masses[index];
+    if (length(force) > forceThreshold)
+    {
+        velocities[index] += force * timeStep;
+    }
+
+    // Time Integration
+    if (length(velocities[index]) * masses[index] > forceThreshold)
+    {
+        positions[index] += velocities[index] * timeStep;
+    }
+
+    // Shape Matching (simplified for example)
+    // Compute current center of mass
+    float3 centerOfMass = ComputeCenterOfMass(positions, masses, THREADS_PER_GROUP);
+
+    // Compute relative positions
+    float3 p = positions[index] - centerOfMass;
+    float3 q = initialPositions[index] - initialCenterOfMass;
+
+    // Simplified rotation matrix (identity for example)
+    float3 goalPosition = q + initialCenterOfMass;
+
+    // Update positions
+    positions[index] = lerp(positions[index], goalPosition, alpha);
+}
