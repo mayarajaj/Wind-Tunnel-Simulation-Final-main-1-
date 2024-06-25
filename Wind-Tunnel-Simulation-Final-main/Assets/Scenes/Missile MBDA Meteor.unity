@@ -591,8 +591,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009344d5872c57f4eb76852ca579aff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineColor: {r: 0.79622644, g: 0.59610647, b: 0, a: 1}
+  maxPositions: 20
   model: {fileID: 1023839730}
-  sphereRadius: 1
+  sphereRadius: 0.7
   timeScale: 1
   fixedTimeStep: 1
   iterationsPerFrame: 1

@@ -648,6 +648,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009344d5872c57f4eb76852ca579aff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showLines: 0
+  lineColor: {r: 0.7207546, g: 0.004079684, b: 0.50951314, a: 1}
+  maxPositions: 20
   model: {fileID: 848796790}
   sphereRadius: 0.7
   timeScale: 1

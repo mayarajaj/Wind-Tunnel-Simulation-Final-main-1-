@@ -281,7 +281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3084304189216666764, guid: 9b8ecc84b03c91d4fb3762c93d2bafe9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5
+      value: -6.13
       objectReference: {fileID: 0}
     - target: {fileID: 3084304189216666764, guid: 9b8ecc84b03c91d4fb3762c93d2bafe9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1fbcf80005c479498b9e926f897d721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleCount: 5000
+  particleCount: 100000
   linesCount: 10
   layersCount: 10
   centre: {x: 1, y: -2.5, z: -20}
@@ -581,7 +581,7 @@ MonoBehaviour:
     z: 10
   jitterStrength: 0.005
   showSpawnBounds: 1
-  debug_numParticles: 5000
+  debug_numParticles: 100000
 --- !u!114 &1046021788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,8 +643,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009344d5872c57f4eb76852ca579aff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showLines: 0
+  lineColor: {r: 0.007824819, g: 0.34477797, b: 0.5924529, a: 1}
+  maxPositions: 20
   model: {fileID: 2125580985}
-  sphereRadius: 1
+  sphereRadius: 0.7
   timeScale: 1
   fixedTimeStep: 1
   iterationsPerFrame: 1
