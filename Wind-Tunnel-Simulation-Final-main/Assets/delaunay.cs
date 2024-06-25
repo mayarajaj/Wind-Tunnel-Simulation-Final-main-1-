@@ -120,7 +120,7 @@ public static class DelaunayTriangulationUtility
         surfaceMesh.RecalculateNormals();
 
         // Assign the new mesh to the MeshFilter
-        meshFilter.mesh = surfaceMesh;
+        //meshFilter.mesh = surfaceMesh;
 
         return triangleVertices;
     }

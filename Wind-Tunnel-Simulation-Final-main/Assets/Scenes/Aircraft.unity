@@ -756,13 +756,37 @@ PrefabInstance:
     - {fileID: 65702495048144492, guid: be1191377a7709845a61df68924e578a, type: 3}
     - {fileID: 8387939572572872472, guid: be1191377a7709845a61df68924e578a, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: be1191377a7709845a61df68924e578a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1527620303}
   m_SourcePrefab: {fileID: 100100000, guid: be1191377a7709845a61df68924e578a, type: 3}
 --- !u!1 &1527620301 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: be1191377a7709845a61df68924e578a, type: 3}
   m_PrefabInstance: {fileID: 1527620300}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1527620303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1527620301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1082571165b11b34283feecaeb11784b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windForce: {x: 0, y: 0, z: 5}
+  alpha: 0.5
+  timeStep: 0.02
+  forceThreshold: 1.5
+  massmin: 1
+  massmax: 1.5
+  meshFilters: []
+  computeShader: {fileID: 7200000, guid: f6e0cc83a74e2214999898a3f47284b6, type: 3}
+  deformationDuration: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

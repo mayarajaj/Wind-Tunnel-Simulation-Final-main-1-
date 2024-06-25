@@ -176,16 +176,31 @@ void ResolveCollisions(uint particleIndex)
     if (intersects)
     {
        
-        float3 normal = normalize(sphereCenter);
-        float3 reflectedVelocity = reflect(velocityLocal, normal);
-        float3 parallelVelocity = velocityLocal - dot(velocityLocal, normal);
-        
-        float blendFactor = 0.5f;
-        velocityLocal = lerp(reflectedVelocity, parallelVelocity, blendFactor);
-       // velocityLocal = reflectedVelocity;
-        velocityLocal *= collisionDamping; // Apply collision damping
-        Positions[particleIndex] = mul(localToWorld, float4(posLocal, 1)).xyz;
-        Velocities[particleIndex] = mul(localToWorld, float4(velocityLocal, 0)).xyz;
+        if (intersects)
+        {
+            float3 normal = normalize(sphereCenter); // Get the normal of the collision surface
+  
+          // Relative velocity   اشرحيلنا line by line 
+            float3 relativeVelocity = velocityLocal;
+  
+          // Compute tangential and normal components of the velocity
+            float3 tangentialVelocity = relativeVelocity - dot(relativeVelocity, normal) * normal;
+            float3 normalVelocity = dot(relativeVelocity, normal) * normal;
+  
+          // Calculate lift and drag forces
+            float3 lift = cross(relativeVelocity, normal) * 0.08f; // Adjust the lift coefficient as needed
+            float3 drag = -normalVelocity * 0.1f; // Adjust the drag coefficient as needed
+  
+          // Update the velocity
+            velocityLocal += lift + drag;
+          
+          // Optionally, update the position slightly to avoid sticking to the surface
+            posLocal += normal * 0.05f; // Small offset to move it away from the surface
+           
+            Positions[particleIndex] = mul(localToWorld, float4(posLocal, 1)).xyz;
+            Velocities[particleIndex] = mul(localToWorld, float4(velocityLocal, 0)).xyz;
+        }
+
         
     }
     
@@ -228,7 +243,7 @@ void ResolveCollisions(uint particleIndex)
         float randomZ = lerp(-22.0, -17.0, randZ);
 
         Positions[particleIndex] = float3(randomX, randomY - 2  , randomZ);
-        Velocities[particleIndex] = float3(0, 0, 6);
+        Velocities[particleIndex] = float3(0, 0, 12);
         return;
     }
 
