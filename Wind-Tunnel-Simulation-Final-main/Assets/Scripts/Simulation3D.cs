@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Simulation3D : MonoBehaviour
 {
@@ -101,6 +102,7 @@ public class Simulation3D : MonoBehaviour
      viscosityStrength = SharedData.viscosityStrength;
       windDirection = SharedData.windDirection;
      windStrength = SharedData.windStrength;
+     showLines = SharedData.showLines;
     
         Debug.Log("Controls: Space = Play/Pause, R = Reset");
         Debug.Log("Use transform tool in scene to scale/rotate simulation bounding box.");
@@ -148,8 +150,8 @@ public class Simulation3D : MonoBehaviour
         rotationOfModel = model.GetComponent<Transform>().localRotation;
        cubeMesh = CombineMeshes.CombineAllChildMeshes(model);
         storedVertexIndices = GetTrianglesVertexIndices(cubeMesh);
-
-        vector3MeshVertices = DelaunayTriangulationUtility.GetVerticesAfterTriangulate(model , positionsOfModel , scaleOfModel , rotationOfModel);
+        vector3MeshVertices = GetStoredIndicesFromMesh(cubeMesh);
+       // vector3MeshVertices = DelaunayTriangulationUtility.GetVerticesAfterTriangulate(model , positionsOfModel , scaleOfModel , rotationOfModel);
         float3MeshVertices = ConvertVector3ArrayToFloat3Array(vector3MeshVertices);
 
 
@@ -323,6 +325,12 @@ public class Simulation3D : MonoBehaviour
         {
             isPaused = true;
             SetInitialBufferData(spawnData);
+        }
+        if(Input.GetKeyDown(KeyCode.Q)){
+            Application.Quit();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            SceneManager.LoadScene("MainMenu");
         }
        
     }

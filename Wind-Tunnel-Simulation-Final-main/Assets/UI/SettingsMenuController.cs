@@ -5,6 +5,8 @@ public class SettingsMenuController : MonoBehaviour
 {
     private string timeScaleInput;
     public Toggle fixedTimeStepToggle;
+
+    public Toggle showLinesToggle;
     private string iterationsPerFrameInput;
     private string gravityInput;
     public Slider collisionDampingSlider;
@@ -19,6 +21,7 @@ public class SettingsMenuController : MonoBehaviour
         // Initialize input fields with default values from SharedData
         timeScaleInput = SharedData.timeScale.ToString();
         fixedTimeStepToggle.isOn = SharedData.fixedTimeStep;
+        showLinesToggle.isOn = SharedData.showLines;
         iterationsPerFrameInput = SharedData.iterationsPerFrame.ToString();
         gravityInput = SharedData.gravity.ToString();
         collisionDampingSlider.value = SharedData.collisionDamping;
@@ -46,6 +49,7 @@ public class SettingsMenuController : MonoBehaviour
         // Use default values if the input fields are empty
         SharedData.timeScale = string.IsNullOrEmpty(timeScaleInput) ? SharedData.timeScale : float.Parse(timeScaleInput);
         SharedData.fixedTimeStep = fixedTimeStepToggle.isOn;
+        SharedData.showLines = showLinesToggle.isOn;
         SharedData.iterationsPerFrame = string.IsNullOrEmpty(iterationsPerFrameInput) ? SharedData.iterationsPerFrame : int.Parse(iterationsPerFrameInput);
         SharedData.gravity = string.IsNullOrEmpty(gravityInput) ? SharedData.gravity : float.Parse(gravityInput);
         SharedData.collisionDamping = collisionDampingSlider.value;

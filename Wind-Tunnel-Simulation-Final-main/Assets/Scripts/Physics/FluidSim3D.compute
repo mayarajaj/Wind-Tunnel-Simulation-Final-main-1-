@@ -180,7 +180,7 @@ void ResolveCollisions(uint particleIndex)
         {
             float3 normal = normalize(sphereCenter); // Get the normal of the collision surface
   
-          // Relative velocity   اشرحيلنا line by line 
+          // Relative velocity 
             float3 relativeVelocity = velocityLocal;
   
           // Compute tangential and normal components of the velocity
@@ -204,28 +204,7 @@ void ResolveCollisions(uint particleIndex)
         
     }
     
-    
-        // Resolve collisions on the x and y axes (bounce back)
-    //    if (edgeDst.x <= 0.2)
-    //    {
-    //    posLocal.z = -halfSize.x;
-    //    // Generate a random seed based on the particle index
-    //    float seed = particleIndex * 12.9898 + 78.233;
 
-    //    // Generate random numbers for each component
-    //    float randX = hash(seed);
-    //    float randY = hash(seed + 1.0);
-    //    float randZ = hash(seed + 2.0);
-
-    //    // Scale and offset to the desired ranges
-    //    float randomX = lerp(-2.0, 2.0, randX);
-    //    float randomY = lerp(-2.5, -1.0, floor(randY * 10.0) * 0.4);
-    //    float randomZ = lerp(-19.0, -17.0, randZ);
-
-    //    Positions[particleIndex] = float3(randomX, randomY, randomZ);
-    //    Velocities[particleIndex] = float3(0, 0, 3);
-    //    return;
-    //}
     if (edgeDst.y <= 0.2 || posLocal.z > halfSize.z || posLocal.z < -halfSize.z || edgeDst.x <= 0.2)
         {
         //posLocal.z = -halfSize.y;
@@ -243,57 +222,10 @@ void ResolveCollisions(uint particleIndex)
         float randomZ = lerp(-22.0, -17.0, randZ);
 
         Positions[particleIndex] = float3(randomX, randomY - 2  , randomZ);
-        Velocities[particleIndex] = float3(0, 0, 12);
+        Velocities[particleIndex] = float3(0, 0, 4);
         return;
     }
-
-    //    // Wrapping behavior on the z axis
-    //    if (posLocal.z > halfSize.z)
-    //    {
-    //        posLocal.z = -halfSize.z;
-    //    // Generate a random seed based on the particle index
-    //    float seed = particleIndex * 12.9898 + 78.233;
-
-    //    // Generate random numbers for each component
-    //    float randX = hash(seed);
-    //    float randY = hash(seed + 1.0);
-    //    float randZ = hash(seed + 2.0);
-
-    //    // Scale and offset to the desired ranges
-    //    float randomX = lerp(-2.0, 2.0, randX);
-    //    float randomY = lerp(-2.5, -1.0, floor(randY * 10.0) * 0.4);
-    //    float randomZ = lerp(-19.0, -17.0, randZ);
-
-    //    Positions[particleIndex] = float3(randomX, randomY, randomZ);
-    //    Velocities[particleIndex] = float3(0, 0, 3);
-    //    return;   
-    //    }
-
-    //    else if (posLocal.z < -halfSize.z)
-    //    {
-    //        posLocal.z = halfSize.z;
-    //    // Generate a random seed based on the particle index
-    //    float seed = particleIndex * 12.9898 + 78.233;
-
-    //    // Generate random numbers for each component
-    //    float randX = hash(seed);
-    //    float randY = hash(seed + 1.0);
-    //    float randZ = hash(seed + 2.0);
-
-    //    // Scale and offset to the desired ranges
-    //    float randomX = lerp(-3.0, 2.0, randX);
-    //    float randomY = lerp(-6.0, -1.0, floor(randY * 10.0) * 0.4);
-    //    float randomZ = lerp(-19.0, -17.0, randZ);
-
-    //    Positions[particleIndex] = float3(randomX, randomY, randomZ);
-    //    Velocities[particleIndex] = float3(0 ,0 , 3);
-    //    return;
-        
-    //}
     
-    
-
-
    
 }
 

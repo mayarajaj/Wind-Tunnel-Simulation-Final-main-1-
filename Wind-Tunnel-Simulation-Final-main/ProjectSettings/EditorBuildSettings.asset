@@ -36,6 +36,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Skull.unity
     guid: ebcd849383c8010488b87a8e6f0637b9
   - enabled: 1
-    path: Assets/Scenes/Missile MBDA Meteor.unity
+    path: Assets/Scenes/Missile.unity
     guid: c9f0610f3434ea242bc97274302e28ca
   m_configObjects: {}

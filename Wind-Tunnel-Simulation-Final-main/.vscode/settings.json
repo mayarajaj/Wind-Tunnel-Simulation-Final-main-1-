@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "final.sln"
+    "dotnet.defaultSolution": "Wind-Tunnel-Simulation-Final-main.sln"
 }

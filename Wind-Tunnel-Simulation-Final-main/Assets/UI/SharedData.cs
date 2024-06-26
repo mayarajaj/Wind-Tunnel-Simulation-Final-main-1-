@@ -13,6 +13,8 @@ public static class SharedData
 
 
     // Simulation settings
+
+    public static bool showLines = false;
     public static float timeScale = 1;
     public static bool fixedTimeStep = true;
     public static int iterationsPerFrame = 1;
