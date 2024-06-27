@@ -19,6 +19,7 @@ RWStructuredBuffer<float2> Densities; // Density, Near Density
 RWStructuredBuffer<uint3> SpatialIndices; // used for spatial hashing
 RWStructuredBuffer<uint> SpatialOffsets; // used for spatial hashing
 StructuredBuffer<float3> Triangles;
+RWStructuredBuffer<int> ParticlesShow ;
 
 // Settings
 const uint numParticles;
@@ -168,64 +169,102 @@ void ResolveCollisions(uint particleIndex)
 
     // Get the sphere center for the current particle
     float3 sphereCenter = Positions[particleIndex];
-
     // Check for intersections with triangles
     bool intersects = IsSphereIntersecting(sphereCenter, sphereRadius, numTriangles, Triangles);
 
     // Reflect velocity and apply damping if intersection detected
+   // Resolve aerodynamic collision
     if (intersects)
     {
-       
-        if (intersects)
-        {
-            float3 normal = normalize(sphereCenter); // Get the normal of the collision surface
+        float3 normal = normalize(sphereCenter); // Get the normal of the collision surface
   
-          // Relative velocity 
-            float3 relativeVelocity = velocityLocal;
+          // Relative velocity   اشرحيلنا line by line 
+        float3 relativeVelocity = velocityLocal;
   
           // Compute tangential and normal components of the velocity
-            float3 tangentialVelocity = relativeVelocity - dot(relativeVelocity, normal) * normal;
-            float3 normalVelocity = dot(relativeVelocity, normal) * normal;
+        float3 tangentialVelocity = relativeVelocity - dot(relativeVelocity, normal) * normal;
+        float3 normalVelocity = dot(relativeVelocity, normal) * normal;
   
           // Calculate lift and drag forces
-            float3 lift = cross(relativeVelocity, normal) * 0.08f; // Adjust the lift coefficient as needed
-            float3 drag = -normalVelocity * 0.1f; // Adjust the drag coefficient as needed
+        float3 lift = cross(relativeVelocity, normal) * 0.05f; // Adjust the lift coefficient as needed
+        float3 drag = -normalVelocity * 0.1f; // Adjust the drag coefficient as needed
   
           // Update the velocity
-            velocityLocal += lift + drag;
+        velocityLocal += lift + drag;
           
           // Optionally, update the position slightly to avoid sticking to the surface
-            posLocal += normal * 0.05f; // Small offset to move it away from the surface
-           
-            Positions[particleIndex] = mul(localToWorld, float4(posLocal, 1)).xyz;
-            Velocities[particleIndex] = mul(localToWorld, float4(velocityLocal, 0)).xyz;
-        }
-
-        
+        posLocal += normal * 0.03f; // Small offset to move it away from the surface
+        ParticlesShow[particleIndex] = 1;
+        Positions[particleIndex] = mul(localToWorld, float4(posLocal, 1)).xyz;
+        Velocities[particleIndex] = mul(localToWorld, float4(velocityLocal, 0)).xyz;
     }
     
-
-    if (edgeDst.y <= 0.2 || posLocal.z > halfSize.z || posLocal.z < -halfSize.z || edgeDst.x <= 0.2)
+        // Resolve collisions on the x and y axes (bounce back)
+        if (edgeDst.x <= 0)
         {
-        //posLocal.z = -halfSize.y;
+            posLocal.x = halfSize.x * sign(posLocal.x);
+            velocityLocal.x *= -1 * collisionDamping;
+         // Transform resolved position/velocity back to world space
+        Positions[particleIndex] = mul(localToWorld, float4(posLocal, 1)).xyz;
+        Velocities[particleIndex] = mul(localToWorld, float4(velocityLocal, 0)).xyz;
+    }
+        if (edgeDst.y <= 0)
+        {
+            posLocal.y = halfSize.y * sign(posLocal.y);
+            velocityLocal.y *= -1 * collisionDamping;
+         // Transform resolved position/velocity back to world space
+        Positions[particleIndex] = mul(localToWorld, float4(posLocal, 1)).xyz;
+        Velocities[particleIndex] = mul(localToWorld, float4(velocityLocal, 0)).xyz;
+    }
+
+    // Wrapping behavior on the z axis
+        if (posLocal.z > halfSize.z)
+        {
+            posLocal.z = -halfSize.z;
         // Generate a random seed based on the particle index
         float seed = particleIndex * 12.9898 + 78.233;
 
-        // Generate random numbers for each component
+// Generate random numbers for each component
         float randX = hash(seed);
         float randY = hash(seed + 1.0);
         float randZ = hash(seed + 2.0);
 
-        // Scale and offset to the desired ranges
-        float randomX = lerp(-7.0, 7.0, randX);
-        float randomY = lerp(-3.0, -2.0, floor(randY * 10.0) * 0.5);
-        float randomZ = lerp(-22.0, -17.0, randZ);
+// Scale and offset to the desired ranges
+        float randomX = lerp(-2.0, 2.0, randX);
+        float randomY = lerp(-2.5, -1.0, floor(randY * 10.0) * 0.4);
+        float randomZ = lerp(-19.0, -17.0, randZ);
 
-        Positions[particleIndex] = float3(randomX, randomY - 2  , randomZ);
-        Velocities[particleIndex] = float3(0, 0, 4);
+        Positions[particleIndex] = float3(randomX, randomY, randomZ);
+        Velocities[particleIndex] = float3(0, 0, 10);
         return;
+            
+        
+        }
+        else if (posLocal.z < -halfSize.z)
+        {
+            posLocal.z = halfSize.z;
+        // Generate a random seed based on the particle index
+        float seed = particleIndex * 12.9898 + 78.233;
+
+// Generate random numbers for each component
+        float randX = hash(seed);
+        float randY = hash(seed + 1.0);
+        float randZ = hash(seed + 2.0);
+
+// Scale and offset to the desired ranges
+        float randomX = lerp(-3.0, 2.0, randX);
+        float randomY = lerp(-6.0, -1.0, floor(randY * 10.0) * 0.4);
+        float randomZ = lerp(-19.0, -17.0, randZ);
+
+        Positions[particleIndex] = float3(randomX, randomY, randomZ);
+        Velocities[particleIndex] = float3(0 ,0 , 10);
+        return;
+        
     }
     
+    
+
+
    
 }
 
